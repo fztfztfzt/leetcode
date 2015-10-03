@@ -25,7 +25,7 @@ int strStr(string haystack, string needle) {
         }
         return -1;
     }
-KMP：8ms
+KMP：8ms 4ms
 int strStr(string haystack, string needle) {
         if(haystack=="" && needle=="") return 0;
         vector<int> v(needle.length()+1,-1);
@@ -33,6 +33,35 @@ int strStr(string haystack, string needle) {
         for(int i=0;i<needle.length();)
         {
             if(j==-1 || needle[i]==needle[j]){++i;++j;v[i]=j;}
+            else j=v[j];
+        }
+        //for(int i=0;i<haystack.length();)
+        //{
+            int i=0,k=0;
+            while(k==-1 || k<needle.length() && i<haystack.length())
+            {
+                if(k==-1 || haystack[i]==needle[k]) ++i,++k;
+                else k=v[k];
+            }
+            if(k>=needle.length()) return i-k;
+        //}
+        return -1;
+        
+    }
+KMP++:8ms
+ int strStr(string haystack, string needle) {
+        if(haystack=="" && needle=="") return 0;
+        vector<int> v(needle.length()+1,-1);
+        int j=-1;
+        for(int i=0;i<needle.length();)
+        {
+            if(j==-1 || needle[i]==needle[j])
+            {
+                ++i;++j;
+                if(needle[i]==needle[j]) v[i]=v[j];
+                else v[i]=j;
+                
+            }
             else j=v[j];
         }
         //for(int i=0;i<haystack.length();)
